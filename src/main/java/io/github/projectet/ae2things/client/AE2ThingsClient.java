@@ -2,6 +2,8 @@ package io.github.projectet.ae2things.client;
 
 import io.github.projectet.ae2things.gui.advancedInscriber.AdvancedInscriberMenu;
 import io.github.projectet.ae2things.gui.advancedInscriber.AdvancedInscriberRootPanel;
+import io.github.projectet.ae2things.gui.advancedInscriber.AdvancedInscriberXMenu;
+import io.github.projectet.ae2things.gui.advancedInscriber.AdvancedInscriberXRootPanel;
 import io.github.projectet.ae2things.item.AETItems;
 import io.github.projectet.ae2things.item.DISKDrive;
 
@@ -39,6 +41,20 @@ public class AE2ThingsClient {
                         }
 
                         return new AdvancedInscriberRootPanel(menu, playerInv, title, style);
+                    });
+        });
+
+        event.enqueueWork(() -> {
+            MenuScreens.<AdvancedInscriberXMenu, AdvancedInscriberXRootPanel>register(
+                    AdvancedInscriberXMenu.ADVANCED_INSCRIBER_SHT, (menu, playerInv, title) -> {
+                        ScreenStyle style;
+                        try {
+                            style = StyleManager.loadStyleDoc("/screens/advanced_inscriber_x.json");
+                        } catch (Exception e) {
+                            throw new RuntimeException("Failed to read Screen JSON file", e);
+                        }
+
+                        return new AdvancedInscriberXRootPanel(menu, playerInv, title, style);
                     });
         });
     }

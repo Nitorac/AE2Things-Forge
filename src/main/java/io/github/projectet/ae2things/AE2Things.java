@@ -6,10 +6,13 @@ import java.util.function.Supplier;
 import com.google.common.base.Suppliers;
 
 import io.github.projectet.ae2things.block.BlockAdvancedInscriber;
+import io.github.projectet.ae2things.block.BlockAdvancedInscriberX;
 import io.github.projectet.ae2things.block.entity.BEAdvancedInscriber;
+import io.github.projectet.ae2things.block.entity.BEAdvancedInscriberX;
 import io.github.projectet.ae2things.client.AE2ThingsClient;
 import io.github.projectet.ae2things.command.Command;
 import io.github.projectet.ae2things.gui.advancedInscriber.AdvancedInscriberMenu;
+import io.github.projectet.ae2things.gui.advancedInscriber.AdvancedInscriberXMenu;
 import io.github.projectet.ae2things.gui.cell.DISKItemCellGuiHandler;
 import io.github.projectet.ae2things.item.AETItems;
 import io.github.projectet.ae2things.storage.DISKCellHandler;
@@ -71,7 +74,16 @@ public class AE2Things {
             .register("advanced_inscriber_be",
                     () -> BlockEntityType.Builder.of(BEAdvancedInscriber::new, ADVANCED_INSCRIBER.get()).build(null));
 
+    public static final RegistryObject<BlockAdvancedInscriberX> ADVANCED_INSCRIBER_X = BLOCKS.register(
+            "advanced_inscriber_x",
+            () -> new BlockAdvancedInscriberX(BlockBehaviour.Properties.of(Material.METAL).destroyTime(4f)));
+
+    public static final RegistryObject<BlockEntityType<BEAdvancedInscriberX>> ADVANCED_INSCRIBER_X_BE = BLOCK_ENTITIES
+            .register("advanced_inscriber_x_be",
+                    () -> BlockEntityType.Builder.of(BEAdvancedInscriberX::new, ADVANCED_INSCRIBER_X.get()).build(null));
+
     public static final RegistryObject<Item> ADVANCED_INSCRIBER_ITEM = createBlockItem(ADVANCED_INSCRIBER);
+    public static final RegistryObject<Item> ADVANCED_INSCRIBER_X_ITEM = createBlockItem(ADVANCED_INSCRIBER_X);
     // @formatter:on
 
     public static ResourceLocation id(String path) {
@@ -105,6 +117,7 @@ public class AE2Things {
         if (event.getRegistryKey().equals(Registry.MENU_REGISTRY)) {
             IForgeRegistry<MenuType<?>> registry = Objects.requireNonNull(event.getForgeRegistry());
             registry.register(id("advanced_inscriber"), AdvancedInscriberMenu.ADVANCED_INSCRIBER_SHT);
+            registry.register(id("advanced_inscriber_x"), AdvancedInscriberXMenu.ADVANCED_INSCRIBER_SHT);
         }
     }
 
@@ -115,8 +128,10 @@ public class AE2Things {
         StorageCells.addCellGuiHandler(new DISKItemCellGuiHandler());
 
         Upgrades.add(AEItems.SPEED_CARD, ADVANCED_INSCRIBER.get(), 5);
+        Upgrades.add(AEItems.SPEED_CARD, ADVANCED_INSCRIBER_X.get(), 7);
 
         ADVANCED_INSCRIBER.get().setBlockEntity(BEAdvancedInscriber.class, ADVANCED_INSCRIBER_BE.get(), null, null);
+        ADVANCED_INSCRIBER_X.get().setBlockEntity(BEAdvancedInscriberX.class, ADVANCED_INSCRIBER_X_BE.get(), null, null);
     }
 
     public static void worldTick(TickEvent.LevelTickEvent event) {

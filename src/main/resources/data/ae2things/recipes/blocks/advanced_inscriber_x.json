@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [" a ", "bcd", " e "],
+  "key": {
+    "a": {
+      "item": "ae2:logic_processor_press"
+    },
+    "b": {
+      "item": "ae2:calculation_processor_press"
+    },
+    "c": {
+      "item": "ae2things:advanced_inscriber"
+    },
+    "d": {
+      "item": "ae2:engineering_processor_press"
+    },
+    "e": {
+      "item": "ae2:silicon_press"
+    }
+  },
+  "result": {
+    "item": "ae2things:advanced_inscriber_x"
+  }
+}

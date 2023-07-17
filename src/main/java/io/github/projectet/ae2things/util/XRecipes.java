@@ -3,6 +3,7 @@ package io.github.projectet.ae2things.util;
 import javax.annotation.Nullable;
 
 import appeng.blockentity.misc.InscriberRecipes;
+import appeng.core.definitions.AEBlocks;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,6 +40,22 @@ public final class XRecipes {
                 AEItems.LOGIC_PROCESSOR_PRINT.isSameAs(in);
     }
 
+    public static InscriberRecipe interceptCraftRecipeFromRes(InscriberRecipe recipe){
+        if(AEItems.CERTUS_QUARTZ_DUST.isSameAs(recipe.getResultItem())){
+            ItemStack output = recipe.getResultItem();
+            output.setCount(4);
+            return new InscriberRecipe(
+                    recipe.getId(),
+                    Ingredient.of(AEBlocks.QUARTZ_BLOCK),
+                    output,
+                    recipe.getTopOptional(),
+                    recipe.getBottomOptional(),
+                    recipe.getProcessType()
+            );
+        }
+        return null;
+    }
+
     /**
      * Returns an unmodifiable view of all registered inscriber recipes.
      */
@@ -46,15 +63,22 @@ public final class XRecipes {
         if(cached_recipes == null){
             cached_recipes = new ArrayList<>();
             for(InscriberRecipe recipe : InscriberRecipes.getRecipes(level)){
+                InscriberRecipe tmp;
+                if(isPrint(recipe.getResultItem())){
+                    recipe = new InscriberRecipe(
+                            recipe.getId(),
+                            recipe.getMiddleInput(),
+                            recipe.getResultItem(),
+                            Ingredient.EMPTY,
+                            recipe.getBottomOptional(),
+                            recipe.getProcessType()
+                    );
+                }
 
-                cached_recipes.add(new InscriberRecipe(
-                        recipe.getId(),
-                        recipe.getMiddleInput(),
-                        recipe.getResultItem(),
-                        isPrint(recipe.getResultItem()) ? Ingredient.EMPTY : recipe.getTopOptional(),
-                        recipe.getBottomOptional(),
-                        recipe.getProcessType()
-                ));
+                if((tmp = interceptCraftRecipeFromRes(recipe)) != null){
+                    recipe = tmp;
+                }
+                cached_recipes.add(recipe);
             }
         }
         return cached_recipes;
